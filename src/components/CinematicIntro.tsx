@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import hero from "@/assets/hero-waterloo.jpg";
 import { music } from "@/lib/music";
+import s1 from "@/assets/intro-1.jpg";
+import s2 from "@/assets/intro-2.jpg";
+import s3 from "@/assets/intro-3.jpg";
+import s4 from "@/assets/intro-4.jpg";
+
+const scenes = [s1, s2, s3, s4];
 
 const lines = ["Europe, 1815.", "Un empereur exilé s'échappe de l'île d'Elbe…", "Deux armées attendent sous la pluie de Belgique.", "Un seul jour décidera du sort d'un continent."];
 
@@ -23,7 +29,11 @@ export function CinematicIntro() {
   if (stage === "hidden") return null;
   return (
     <div className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background transition-opacity duration-[1500ms] ${stage === "out" ? "opacity-0" : "opacity-100"}`}>
-      <img src={hero} alt="" className={`absolute inset-0 h-full w-full object-cover sepia-img transition-all duration-[12000ms] ${stage === "gate" ? "scale-100 opacity-20" : "scale-125 opacity-50"}`} />
+      <img src={hero} alt="" className={`absolute inset-0 h-full w-full object-cover sepia-img transition-all duration-[3000ms] ${stage === "gate" ? "opacity-20" : stage === "title" || stage === "out" ? "scale-110 opacity-60" : "opacity-0"}`} />
+      {scenes.map((src, k) => (
+        <img key={src} src={src} alt="" className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] ease-out ${stage === "playing" && line === k ? "scale-125 opacity-70 duration-[2600ms,9000ms]" : "scale-100 opacity-0 duration-[1500ms]"}`} />
+      ))}
+      {stage === "playing" && <div key={line} className="pointer-events-none absolute inset-0 animate-flash bg-gold" />}
       <div className="absolute inset-0 vignette" />
       <div className="absolute inset-x-0 top-0 h-[12vh] bg-background" />
       <div className="absolute inset-x-0 bottom-0 h-[12vh] bg-background" />
@@ -31,7 +41,7 @@ export function CinematicIntro() {
         {stage === "gate" && (
           <div className="animate-fade-up">
             <p className="font-heading text-xs uppercase tracking-[0.5em] text-gold">Un film historique en trois actes</p>
-            <button onClick={() => { music.play("guard"); setStage("playing"); }} className="btn-vintage mt-8">▶ Commencer le film</button>
+            <button onClick={() => { music.play("overture"); setStage("playing"); }} className="btn-vintage mt-8">▶ Commencer le film</button>
             <p className="mt-4 text-sm italic text-foreground/60">Activez le son pour une expérience complète</p>
           </div>
         )}

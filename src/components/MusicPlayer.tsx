@@ -16,7 +16,7 @@ export function MusicPlayer() {
         <div className="paper mb-3 w-72 p-4">
           <p className="font-heading text-xs uppercase tracking-[0.3em]">Military Band</p>
           <ul className="mt-3 space-y-2">
-            {tracks.map((t) => (
+            {tracks.filter((x) => !x.hidden).map((t) => (
               <li key={t.id}>
                 <button onClick={() => (cur === t.id ? music.stop() : music.play(t.id))} className={`w-full border p-2 text-left ${cur === t.id ? "border-primary bg-primary text-primary-foreground" : "border-ink/30 hover:bg-ink/10"}`}>
                   <span className="font-heading text-sm">{cur === t.id ? "❚❚ " : "▶ "}{t.title}</span>

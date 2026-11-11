@@ -98,3 +98,5 @@
 @utility animate-fade-up { animation: fade-up 1.2s ease-out both; }
 @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 70%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
 @utility animate-pulse-ring { animation: pulse-ring 1.6s infinite; }
+@keyframes flash { 0% { opacity: .35; } 100% { opacity: 0; } }
+@utility animate-flash { animation: flash 1.2s ease-out both; }

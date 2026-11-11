@@ -1,8 +1,12 @@
 // Synthesized period music (Web Audio) — no audio files needed.
 type Note = [number, number]; // midi (0 = rest), beats
-export type Track = { id: string; title: string; sub: string; bpm: number; melody: Note[]; drum: number[] };
+export type Track = { id: string; title: string; sub: string; bpm: number; melody: Note[]; drum: number[]; chords?: number[][]; hidden?: boolean };
 
 export const tracks: Track[] = [
+  { id: "overture", title: "Overture of Waterloo", sub: "Epic score of the opening film", bpm: 60, hidden: false,
+    chords: [[38,50,53,57],[34,46,50,53],[31,43,46,50],[33,45,49,52]],
+    melody: [[62,2],[65,1],[69,1],[70,3],[69,1],[67,2],[65,1],[67,1],[69,4],[74,2],[72,1],[70,1],[69,3],[67,1],[65,2],[64,2],[62,4]],
+    drum: [1,0,0,0,.6,0,.3,.6] },
   { id: "marseillaise", title: "La Marseillaise", sub: "Anthem of the Revolution, 1792", bpm: 100,
     melody: [[62,.75],[62,.25],[67,1],[67,1],[69,1],[69,1],[74,1.5],[71,.5],[67,.75],[67,.25],[71,.75],[67,.25],[64,1],[72,2],[69,.75],[66,.25],[67,2],[0,1],
       [67,.75],[69,.25],[71,1],[71,1],[71,1],[72,.75],[71,.25],[71,1],[69,1],[0,1],[69,.75],[71,.25],[72,1],[72,1],[72,1],[74,.75],[72,.25],[71,2],[0,2]],
@@ -38,7 +42,11 @@ export const music = {
       if (!ctx || !master) return;
       let time = start;
       for (const [m, b] of t.melody) { if (m) tone(m, time, b * beat * 0.95); time += b * beat; }
-      for (let i = 0; i < loopBeats * 2; i++) { const v = t.drum[i % t.drum.length]!; if (v) drum(start + i * beat / 2, v); }
+      if (t.chords) {
+        const len = loopBeats / t.chords.length;
+        t.chords.forEach((c, k) => { const ct = start + k * len * beat; c.forEach((m) => pad(m, ct, len * beat)); boom(ct, 1); boom(ct + len * beat * 0.75, 0.5); });
+      }
+      for (let i = 0; i < loopBeats * 2; i++) { const v = t.drum[i % t.drum.length]!; if (v) (t.chords ? boom(start + i * beat / 2, v * 0.5) : drum(start + i * beat / 2, v)); }
       start += loopBeats * beat;
     };
     schedule();
@@ -71,4 +79,24 @@ function drum(t: number, v: number) {
   const hp = ctx.createBiquadFilter(); hp.type = "bandpass"; hp.frequency.value = 1500;
   const g = ctx.createGain(); g.gain.value = 0.6 * v;
   s.connect(hp).connect(g).connect(master); s.start(t);
+}
+
+function pad(midi: number, t: number, d: number) {
+  if (!ctx || !master) return;
+  const f = 440 * 2 ** ((midi - 69) / 12);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.18, t + d * 0.4); g.gain.linearRampToValueAtTime(0, t + d + 0.5);
+  for (const det of [-6, 0, 7]) {
+    const o = ctx.createOscillator(); const lp = ctx.createBiquadFilter();
+    o.type = "sawtooth"; o.frequency.value = f; o.detune.value = det; lp.frequency.value = 900;
+    o.connect(lp).connect(g); o.start(t); o.stop(t + d + 0.6);
+  }
+  g.connect(master);
+}
+function boom(t: number, v: number) {
+  if (!ctx || !master) return;
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(38, t + 0.6);
+  g.gain.setValueAtTime(1.6 * v, t); g.gain.exponentialRampToValueAtTime(0.001, t + 1.4);
+  o.connect(g).connect(master); o.start(t); o.stop(t + 1.5);
 }
