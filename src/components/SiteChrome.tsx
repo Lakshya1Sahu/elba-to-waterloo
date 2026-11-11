@@ -28,6 +28,8 @@ export function SiteFooter() {
     <footer className="border-t border-gold/30 px-5 py-10 text-center text-sm italic text-foreground/60">
       <div className="gold-rule mx-auto mb-6 max-w-md" />
       “Glory is fleeting, but obscurity is forever.” — Napoleon Bonaparte
+      <p className="mt-6 text-xs not-italic text-foreground/50">Created by Lakshya, Atiff, Pranav &amp; Suryansh</p>
+      <p className="mt-1 text-xs not-italic text-foreground/50">Designed &amp; Developed with passion. © 2026 The Fall of Napoleon. All Rights Reserved.</p>
     </footer>
   );
 }

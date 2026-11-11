@@ -33,6 +33,36 @@ const timeline = [
   { year: "1821", title: "Death on St Helena", place: "Longwood, St Helena", text: "He dies in exile on a remote Atlantic island, aged 51.", more: "He dictates his memoirs and shapes his own legend. In 1840 his body returns to Paris and lies today beneath the dome of Les Invalides.", quote: "What a novel my life has been!" },
 ];
 
+const characters = [
+  { n: "Napoleon Bonaparte", r: "Emperor of the French", s: "French", d: "Military genius who rose from Corsican officer to master of Europe, defeated at last at Waterloo." },
+  { n: "Duke of Wellington", r: "Commander, Anglo-Allied Army", s: "Allied", d: "Arthur Wellesley, victor of the Peninsular War; held the ridge of Mont-Saint-Jean all day." },
+  { n: "Gebhard von Blücher", r: "Prussian Field Marshal", s: "Allied", d: "Aged 72, beaten at Ligny, he still marched to Waterloo and struck the decisive blow at Plancenoit." },
+  { n: "Marshal Michel Ney", r: "'Bravest of the Brave'", s: "French", d: "Led the great cavalry charges and the Guard's attack; executed for treason later in 1815." },
+  { n: "Marshal Grouchy", r: "Commander of the Right Wing", s: "French", d: "Sent to chase the Prussians with 33,000 men, he never reached the battlefield in time." },
+  { n: "Tsar Alexander I", r: "Emperor of Russia", s: "Allied", d: "Napoleon's ally at Tilsit turned enemy; his armies destroyed the Grande Armée in 1812." },
+  { n: "Horatio Nelson", r: "British Admiral", s: "Allied", d: "Won Trafalgar in 1805, ending Napoleon's hopes of invading Britain. Killed in the battle." },
+  { n: "Josephine & Marie-Louise", r: "Empresses of France", s: "French", d: "His first love Josephine, divorced in 1810; then Marie-Louise of Austria, mother of his heir." },
+];
+
+const wars = [
+  { y: "1803–1805", t: "War of the Third Coalition", w: "Britain, Austria, Russia", o: "French victory at Ulm and Austerlitz; British victory at sea at Trafalgar." },
+  { y: "1806–1807", t: "War of the Fourth Coalition", w: "Prussia, Russia", o: "Prussia crushed at Jena–Auerstedt; peace of Tilsit makes Napoleon master of the continent." },
+  { y: "1807–1814", t: "Peninsular War", w: "Spain, Portugal, Britain", o: "Guerrilla war and Wellington's army bleed France for seven years — the 'Spanish ulcer'." },
+  { y: "1809", t: "War of the Fifth Coalition", w: "Austria", o: "Defeat at Aspern-Essling, then victory at Wagram; Napoleon marries an Austrian princess." },
+  { y: "1812", t: "Invasion of Russia", w: "Russia", o: "Borodino, burning Moscow and the winter retreat: over 400,000 men lost." },
+  { y: "1813–1814", t: "War of the Sixth Coalition", w: "All of Europe", o: "Defeat at Leipzig; the Allies take Paris and Napoleon abdicates to Elba." },
+  { y: "1815", t: "War of the Seventh Coalition", w: "Britain, Prussia, Netherlands", o: "The Hundred Days end at Waterloo; final exile to St Helena." },
+];
+
+const defeat = [
+  { t: "Overreach in Russia", d: "The 1812 invasion destroyed his best veterans and horses — losses he could never replace." },
+  { t: "The Spanish Ulcer", d: "Hundreds of thousands of troops were tied down in Spain, fighting guerrillas and Wellington." },
+  { t: "Europe United", d: "The coalitions learned to fight together and copied his methods; Britain's money paid for their armies." },
+  { t: "Britain Ruled the Seas", d: "After Trafalgar the Royal Navy blockaded France, and the Continental System hurt France's own allies." },
+  { t: "Mistakes at Waterloo", d: "He waited for the ground to dry, sent Grouchy away, and Ney's cavalry charged without infantry support." },
+  { t: "The Prussians Arrived", d: "Blücher's 50,000 men struck the French flank in the evening; the Guard broke and the army fled." },
+];
+
 function Index() {
   return (
     <main>
@@ -95,6 +125,70 @@ function Index() {
                   <p className="mt-3">{t.more}</p>
                   {t.quote && <blockquote className="mt-4 border-l-2 border-primary pl-4 italic text-primary">“{t.quote}”</blockquote>}
                 </details>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="px-5 py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Dramatis Personae</p>
+            <h2 className="mt-3 font-display text-4xl">The Main Characters</h2>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {characters.map((c) => (
+              <div key={c.n} className="paper p-6">
+                <p className={`font-heading text-xs uppercase tracking-widest ${c.s === "French" ? "text-secondary" : "text-primary"}`}>{c.s}</p>
+                <h3 className="mt-2 font-heading text-lg font-bold">{c.n}</h3>
+                <p className="text-sm italic">{c.r}</p>
+                <p className="mt-3 text-base">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-20">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-12 text-center">
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Europe at War</p>
+            <h2 className="mt-3 font-display text-4xl">The Napoleonic Wars & Campaigns</h2>
+            <p className="mx-auto mt-4 max-w-2xl italic text-foreground/75">Twelve years of war, seven coalitions, and millions of soldiers across a continent.</p>
+          </div>
+          <div className="paper overflow-x-auto p-6">
+            <table className="w-full text-left">
+              <thead className="font-heading text-xs uppercase tracking-widest">
+                <tr className="border-b border-ink/40"><th className="p-3">Years</th><th className="p-3">War</th><th className="p-3">Against</th><th className="p-3">Outcome</th></tr>
+              </thead>
+              <tbody>
+                {wars.map((w) => (
+                  <tr key={w.t} className="border-b border-ink/20 align-top">
+                    <td className="p-3 font-heading text-sm text-primary">{w.y}</td>
+                    <td className="p-3 font-heading font-bold">{w.t}</td>
+                    <td className="p-3 italic">{w.w}</td>
+                    <td className="p-3">{w.o}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">The Fall</p>
+            <h2 className="mt-3 font-display text-4xl">How Was Napoleon Defeated?</h2>
+          </div>
+          <ol className="grid gap-6 md:grid-cols-3">
+            {defeat.map((d, i) => (
+              <li key={d.t} className="paper p-6">
+                <span className="font-display text-4xl text-primary">{["I", "II", "III", "IV", "V", "VI"][i]}</span>
+                <h3 className="mt-2 font-heading text-lg font-bold">{d.t}</h3>
+                <p className="mt-2">{d.d}</p>
               </li>
             ))}
           </ol>
