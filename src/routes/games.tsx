@@ -83,7 +83,7 @@ function Chronology() {
     const j = idx + d;
     if (j < 0 || j >= order.length) return;
     const n = [...order];
-    [n[idx], n[j]] = [n[j], n[idx]];
+    const tmp = n[idx]!; n[idx] = n[j]!; n[j] = tmp;
     setOrder(n);
     setChecked(false);
   };
@@ -127,8 +127,9 @@ function Commanders() {
   const [idx, setIdx] = useState(0);
   const [score, setScore] = useState(0);
   const [msg, setMsg] = useState("");
-  const cur = deck[idx];
+  const cur = deck[idx] as (typeof figures)[number] | undefined;
   const answer = (side: string) => {
+    if (!cur) return;
     const ok = side === cur.side;
     if (ok) setScore((s) => s + 1);
     setMsg(ok ? "Correct!" : `No — ${cur.n} fought for the ${cur.side} side.`);
