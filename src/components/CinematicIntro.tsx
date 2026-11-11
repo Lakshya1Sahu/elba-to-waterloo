@@ -17,6 +17,7 @@ export function CinematicIntro() {
   useEffect(() => {
     if (stage === "title") { const t = setTimeout(() => finish(), 4500); return () => clearTimeout(t); }
     if (stage === "out") { const t = setTimeout(() => setStage("hidden"), 1500); return () => clearTimeout(t); }
+    return undefined;
   }, [stage]);
   const finish = () => { sessionStorage.setItem("intro-seen", "1"); setStage("out"); };
   if (stage === "hidden") return null;
