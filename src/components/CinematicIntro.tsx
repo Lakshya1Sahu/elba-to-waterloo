@@ -25,19 +25,23 @@ export function CinematicIntro() {
     if (stage === "out") { const t = setTimeout(() => setStage("hidden"), 1500); return () => clearTimeout(t); }
     return undefined;
   }, [stage]);
+  useEffect(() => {
+    if (stage === "hidden") return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [stage]);
   const finish = () => { sessionStorage.setItem("intro-seen", "1"); setStage("out"); };
   if (stage === "hidden") return null;
   return (
     <div className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background transition-opacity duration-[1500ms] ${stage === "out" ? "opacity-0" : "opacity-100"}`}>
-      <img src={hero} alt="" className={`absolute inset-0 h-full w-full object-cover sepia-img transition-all duration-[3000ms] ${stage === "gate" ? "opacity-20" : stage === "title" || stage === "out" ? "scale-110 opacity-60" : "opacity-0"}`} />
+      <img src={hero} alt="" className={`absolute inset-0 h-full w-full object-cover sepia-img transition-all duration-[3000ms] ${stage === "gate" ? "opacity-70" : stage === "title" || stage === "out" ? "scale-110 opacity-95" : "opacity-0"}`} />
       {scenes.map((src, k) => (
-        <img key={src} src={src} alt="" className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] ease-out ${stage === "playing" && line === k ? "scale-125 opacity-70 duration-[2600ms,9000ms]" : "scale-100 opacity-0 duration-[1500ms]"}`} />
+        <img key={src} src={src} alt="" className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] ease-out ${stage === "playing" && line === k ? "scale-125 opacity-100 duration-[2600ms,9000ms]" : "scale-100 opacity-0 duration-[1500ms]"}`} />
       ))}
       {stage === "playing" && <div key={line} className="pointer-events-none absolute inset-0 animate-flash bg-gold" />}
       <div className="absolute inset-0 vignette" />
-      <div className="absolute inset-x-0 top-0 h-[12vh] bg-background" />
-      <div className="absolute inset-x-0 bottom-0 h-[12vh] bg-background" />
-      <div className="relative px-6 text-center">
+      <div className="relative z-10 px-6 text-center">
         {stage === "gate" && (
           <div className="animate-fade-up">
             <p className="font-heading text-xs uppercase tracking-[0.5em] text-gold">Un film historique en trois actes</p>
@@ -57,7 +61,7 @@ export function CinematicIntro() {
           </div>
         )}
       </div>
-      {stage !== "gate" && <button onClick={finish} className="absolute bottom-[14vh] right-6 font-heading text-xs uppercase tracking-widest text-foreground/60 hover:text-gold">Passer ›</button>}
+      {stage !== "gate" && <button onClick={finish} className="absolute bottom-6 right-6 z-10 font-heading text-xs uppercase tracking-widest text-foreground/70 hover:text-gold">Passer ›</button>}
     </div>
   );
 }
