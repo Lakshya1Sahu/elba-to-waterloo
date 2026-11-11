@@ -8,13 +8,15 @@ import img_grouchy from "@/assets/char-grouchy.jpg";
 import img_alexander from "@/assets/char-alexander.jpg";
 import img_nelson from "@/assets/char-nelson.jpg";
 import img_josephine from "@/assets/char-josephine.jpg";
-import { useLang, t } from "@/lib/i18n";
+import { useLang, t, translate, usePageLanguage } from "@/lib/i18n";
 import { CinematicIntro } from "@/components/CinematicIntro";
 import portrait from "@/assets/napoleon-portrait.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Napoleon: The Road to Waterloo" },
       { name: "description", content: "From Corsica to Waterloo: the rise, exile and final defeat of Napoleon Bonaparte." },
       { property: "og:title", content: "Napoleon: The Road to Waterloo" },
@@ -67,22 +69,24 @@ const defeat = [
   { t: "Overreach in Russia", d: "The 1812 invasion destroyed his best veterans and horses — losses he could never replace.", fr: ["L'excès en Russie", "L'invasion de 1812 détruisit ses meilleurs vétérans et chevaux — des pertes irremplaçables."] },
   { t: "The Spanish Ulcer", d: "Hundreds of thousands of troops were tied down in Spain, fighting guerrillas and Wellington.", fr: ["L'ulcère espagnol", "Des centaines de milliers de soldats furent immobilisés en Espagne face aux guérilleros et à Wellington."] },
   { t: "Europe United", d: "The coalitions learned to fight together and copied his methods; Britain's money paid for their armies.", fr: ["L'Europe unie", "Les coalitions apprirent à combattre ensemble et copièrent ses méthodes ; l'or britannique paya leurs armées."] },
-  { t: "Britain Ruled the Seas", d: "After Trafalgar the Royal Navy blockaded France, and the Continental System hurt France's own allies.", fr: ["La Grande-Bretagne maîtresse des mers", "Après Trafalgar, la Royal Navy bloqua la France, et le Blocus continental nuisit à ses propres alliés."] },
+  { t: "Britain Ruled the Seas", d: "After Trafalgar the Royal Navy blockaded France, and the Continental System hurt France's own allies.", fr: ["La Grande-Bretagne maîtresse des mers", "Après Trafalgar, la marine royale britannique bloqua la France, et le Blocus continental nuisit à ses propres alliés."] },
   { t: "Mistakes at Waterloo", d: "He waited for the ground to dry, sent Grouchy away, and Ney's cavalry charged without infantry support.", fr: ["Les erreurs de Waterloo", "Il attendit que le sol sèche, éloigna Grouchy, et la cavalerie de Ney chargea sans soutien d'infanterie."] },
   { t: "The Prussians Arrived", d: "Blücher's 50,000 men struck the French flank in the evening; the Guard broke and the army fled.", fr: ["L'arrivée des Prussiens", "Les 50 000 hommes de Blücher frappèrent le flanc français le soir ; la Garde plia et l'armée s'enfuit."] },
 ];
 
 function Index() {
+  usePageLanguage("Napoleon: The Road to Waterloo", "Napoléon : La Route de Waterloo", "From Corsica to Waterloo: the rise, exile and final defeat of Napoleon Bonaparte.", "De la Corse à Waterloo : l'ascension, l'exil et la défaite finale de Napoléon Bonaparte.");
   const lang = useLang();
+  const L = (text: string) => translate(lang, text);
   const T = (en: string, fr: string) => t(lang, en, fr);
   return (
     <main>
       <CinematicIntro />
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden">
-        <img src={hero} alt="Napoleon on a white horse overlooking the burning field of Waterloo" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover sepia-img" />
+        <img src={hero} alt={L("Napoleon on a white horse overlooking the burning field of Waterloo")} width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover sepia-img" />
         <div className="absolute inset-0 bg-background/45 vignette" />
         <div className="relative px-5 text-center animate-fade-up">
-          <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">Anno MDCCCXV</p>
+          <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">{L("Anno MDCCCXV")}</p>
           <h1 className="mt-6 font-display text-5xl leading-tight text-foreground drop-shadow-lg md:text-8xl">
             {T("Napoleon", "Napoléon")}
           </h1>
@@ -100,7 +104,7 @@ function Index() {
 
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-24 md:grid-cols-2">
         <div className="paper rotate-[-1.5deg] p-4">
-          <img src={portrait} alt="Portrait of Napoleon in imperial uniform" width={832} height={1088} loading="lazy" className="w-full sepia-img" />
+          <img src={portrait} alt={L("Portrait of Napoleon in imperial uniform")} width={832} height={1088} loading="lazy" className="w-full sepia-img" />
           <p className="mt-3 text-center italic">Napoléon Ier, Empereur des Français</p>
         </div>
         <div>
@@ -145,15 +149,15 @@ function Index() {
       <section className="px-5 py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
-            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Dramatis Personae</p>
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{L("Dramatis Personae")}</p>
             <h2 className="mt-3 font-display text-4xl">{T("The Main Characters", "Les personnages principaux")}</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {characters.map((c) => (
-              <div key={c.n} className="paper p-4">
-                <img src={c.img} alt={`Portrait of ${c.n}`} width={736} height={912} loading="lazy" className="mb-4 aspect-[4/5] w-full object-cover sepia-img" />
+              <div key={L(c.n)} className="paper p-4">
+                <img src={c.img} alt={lang === "fr" ? `Portrait de ${L(c.n)}` : `Portrait of ${L(c.n)}`} width={736} height={912} loading="lazy" className="mb-4 aspect-[4/5] w-full object-cover sepia-img" />
                 <p className={`font-heading text-xs uppercase tracking-widest ${c.s === "French" ? "text-secondary" : "text-primary"}`}>{c.s === "French" ? T("French", "Français") : T("Allied", "Alliés")}</p>
-                <h3 className="mt-2 font-heading text-lg font-bold">{c.n}</h3>
+                <h3 className="mt-2 font-heading text-lg font-bold">{L(c.n)}</h3>
                 <p className="text-sm italic">{T(c.r, c.fr.r)}</p>
                 <p className="mt-3 text-base">{T(c.d, c.fr.d)}</p>
               </div>
@@ -176,11 +180,11 @@ function Index() {
               </thead>
               <tbody>
                 {wars.map((w) => (
-                  <tr key={w.t} className="border-b border-ink/20 align-top">
+                  <tr key={L(w.t)} className="border-b border-ink/20 align-top">
                     <td className="p-3 font-heading text-sm text-primary">{w.y}</td>
-                    <td className="p-3 font-heading font-bold">{w.t}</td>
-                    <td className="p-3 italic">{w.w}</td>
-                    <td className="p-3">{w.o}</td>
+                    <td className="p-3 font-heading font-bold">{L(w.t)}</td>
+                    <td className="p-3 italic">{L(w.w)}</td>
+                    <td className="p-3">{L(w.o)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -199,8 +203,8 @@ function Index() {
             {defeat.map((d, i) => (
               <li key={d.t} className="paper p-6">
                 <span className="font-display text-4xl text-primary">{["I", "II", "III", "IV", "V", "VI"][i]}</span>
-                <h3 className="mt-2 font-heading text-lg font-bold">{T(d.t, d.fr[0]!)}</h3>
-                <p className="mt-2">{T(d.d, d.fr[1]!)}</p>
+                <h3 className="mt-2 font-heading text-lg font-bold">{T(d.t, d.fr[0] ?? "")}</h3>
+                <p className="mt-2">{T(d.d, d.fr[1] ?? "")}</p>
               </li>
             ))}
           </ol>
@@ -211,8 +215,8 @@ function Index() {
         <div className="paper mx-auto grid max-w-5xl gap-8 p-10 text-center md:grid-cols-4">
           {[["190,000", "Soldiers on the field"], ["~50,000", "Casualties in one day"], ["10 hours", "Of battle"], ["3 armies", "French, Allied, Prussian"]].map(([n, l]) => (
             <div key={l}>
-              <div className="font-display text-3xl text-primary">{n}</div>
-              <div className="mt-2 font-heading text-xs uppercase tracking-widest">{l}</div>
+              <div className="font-display text-3xl text-primary">{L(n ?? "")}</div>
+              <div className="mt-2 font-heading text-xs uppercase tracking-widest">{L(l ?? "")}</div>
             </div>
           ))}
         </div>

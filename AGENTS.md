@@ -28,3 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Translate shared interactive content with the central French catalog and live language hook; keep game state language-neutral so switching languages also updates past feedback and dispatches.

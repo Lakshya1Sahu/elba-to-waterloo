@@ -1,3 +1,5 @@
+import { translate, useLang } from "@/lib/i18n";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 type Opt = { label: string; desc: string; fr: [number, number]; al: [number, number]; pr: number; log: string };
@@ -26,26 +28,30 @@ const turns: { time: string; title: string; brief: string; opts: Opt[] }[] = [
 const r = ([a, b]: [number, number]) => a + Math.floor(Math.random() * (b - a + 1));
 
 export function BattleSim() {
+  const lang = useLang();
+  const L = (text: string) => translate(lang, text);
   const [turn, setTurn] = useState(0);
   const [fr, setFr] = useState(100);
   const [al, setAl] = useState(100);
   const [pr, setPr] = useState(0); // >0 delays Prussians
-  const [log, setLog] = useState<string[]>(["You are Napoleon. 72,000 French face 68,000 Allies — and 50,000 Prussians are coming."]);
+  const [log, setLog] = useState<{ text: string; time?: string; hit?: number }[]>([{ text: "You are Napoleon. 72,000 French face 68,000 Allies — and 50,000 Prussians are coming." }]);
   const [retreat, setRetreat] = useState(false);
-  const reset = () => { setTurn(0); setFr(100); setAl(100); setPr(0); setRetreat(false); setLog(["The dawn of 18 June breaks again…"]); };
+  const reset = () => { setTurn(0); setFr(100); setAl(100); setPr(0); setRetreat(false); setLog([{ text: "The dawn of 18 June breaks again…" }]); };
 
   const choose = (o: Opt) => {
+    const currentTurn = turns[turn];
+    if (!currentTurn) return;
     const prussianHit = turn >= 2 && pr <= 0 ? 8 + Math.floor(Math.random() * 6) : 0;
     const nf = Math.max(0, fr - r(o.fr) - prussianHit), na = Math.max(0, al - r(o.al));
     setFr(nf); setAl(na); setPr(pr + o.pr);
-    setLog([`${turns[turn]!.time} — ${o.log}${prussianHit ? ` Prussians strike your flank (−${prussianHit}).` : ""}`, ...log]);
+    setLog([{ time: currentTurn.time, text: o.log, hit: prussianHit }, ...log]);
     if (o.label.includes("retreat")) setRetreat(true);
     setTurn(turn + 1);
   };
 
   const over = turn >= turns.length || fr <= 0 || al <= 0;
   const margin = al - fr;
-  const result = retreat ? ["A Strategic Withdrawal", "The Empire lives to fight another day — history takes a different road."]
+  const result: [string, string] = retreat ? ["A Strategic Withdrawal", "The Empire lives to fight another day — history takes a different road."]
     : margin <= -25 ? ["Glorious Victory!", "Wellington's line breaks. Brussels lies open. Vive l'Empereur!"]
     : margin <= 0 ? ["A Bloody Draw", "Both armies are spent. Neither can claim the field."]
     : ["Defeat at Waterloo", "'La Garde recule!' — as in history, your army flees towards France."];
@@ -56,40 +62,40 @@ export function BattleSim() {
       <div className="grid gap-4 sm:grid-cols-3">
         {[["French Army", fr, "bg-secondary"], ["Allied Army", al, "bg-primary"]].map(([n, v, c]) => (
           <div key={n as string}>
-            <div className="flex justify-between font-heading text-xs uppercase tracking-widest"><span>{n}</span><span>{v}%</span></div>
+            <div className="flex justify-between font-heading text-xs uppercase tracking-widest"><span>{L(String(n))}</span><span>{v}%</span></div>
             <div className="mt-1 h-3 border border-ink/40"><div className={`h-full ${c} transition-all duration-700`} style={{ width: `${v}%` }} /></div>
           </div>
         ))}
         <div className="font-heading text-xs uppercase tracking-widest">
-          Prussians<div className="mt-1 text-sm normal-case italic">{pr > 0 ? "Held back by Grouchy" : turn >= 2 ? "Attacking your flank!" : "Marching from Wavre"}</div>
+          {L("Prussians")}<div className="mt-1 text-sm normal-case italic">{L(pr > 0 ? "Held back by Grouchy" : turn >= 2 ? "Attacking your flank!" : "Marching from Wavre")}</div>
         </div>
       </div>
 
       {over ? (
         <div className="mt-8 text-center">
-          <p className="font-display text-4xl">{result[0]}</p>
-          <p className="mt-3 italic">{result[1]}</p>
-          <button onClick={reset} className="mt-6 border border-ink px-6 py-2 font-heading text-sm uppercase tracking-widest hover:bg-ink hover:text-parchment">Replay the battle</button>
+          <p className="font-display text-4xl">{L(result[0])}</p>
+          <p className="mt-3 italic">{L(result[1])}</p>
+          <Button variant="ghost" onClick={reset} className="mt-6 border border-ink px-6 py-2 font-heading text-sm uppercase tracking-widest hover:bg-ink hover:text-parchment">{L('Replay the battle')}</Button>
         </div>
       ) : cur && (
         <div className="mt-8">
-          <p className="font-heading text-xs uppercase tracking-[0.3em] text-primary">Turn {turn + 1} / {turns.length} · {cur.time}</p>
-          <h3 className="mt-2 font-heading text-2xl font-bold">{cur.title}</h3>
-          <p className="mt-2 italic">{cur.brief}</p>
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-primary">{L("Turn")} {turn + 1} / {turns.length} · {cur.time}</p>
+          <h3 className="mt-2 font-heading text-2xl font-bold">{L(cur.title)}</h3>
+          <p className="mt-2 italic">{L(cur.brief)}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-3">
             {cur.opts.map((o) => (
-              <button key={o.label} onClick={() => choose(o)} className="border-2 border-ink/40 p-4 text-left transition hover:bg-ink hover:text-parchment">
-                <span className="font-heading font-bold">{o.label}</span>
-                <span className="mt-1 block text-sm italic">{o.desc}</span>
-              </button>
+              <Button variant="ghost" key={o.label} onClick={() => choose(o)} className="h-auto min-h-32 flex-col items-start whitespace-normal border-2 border-ink/40 p-4 text-left transition hover:bg-ink hover:text-parchment">
+                <span className="font-heading font-bold">{L(o.label)}</span>
+                <span className="mt-1 block text-sm italic">{L(o.desc)}</span>
+              </Button>
             ))}
           </div>
         </div>
       )}
 
       <div className="mt-8 border-t border-ink/30 pt-4">
-        <p className="font-heading text-xs uppercase tracking-widest">Dispatches</p>
-        <ul className="mt-2 max-h-40 space-y-1 overflow-auto text-sm italic">{log.map((l, i) => <li key={i}>{l}</li>)}</ul>
+        <p className="font-heading text-xs uppercase tracking-widest">{L('Dispatches')}</p>
+        <ul className="mt-2 max-h-40 space-y-1 overflow-auto text-sm italic">{log.map((l, i) => <li key={i}>{l.time ? `${l.time} — ` : ""}{L(l.text)}{l.hit ? (lang === "fr" ? ` Les Prussiens frappent votre flanc (−${l.hit}).` : ` Prussians strike your flank (−${l.hit}).`) : ""}</li>)}</ul>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+import { translate, useLang, usePageLanguage } from "@/lib/i18n";
+import { Button } from "@/components/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import battleMap from "@/assets/battle-map.jpg";
@@ -6,6 +8,8 @@ import { PageTitle } from "@/components/SiteChrome";
 export const Route = createFileRoute("/map")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Interactive Battle Map — Waterloo 1815" },
       { name: "description", content: "Explore the key positions of the Battle of Waterloo on an antique campaign map." },
       { property: "og:title", content: "Interactive Battle Map — Waterloo 1815" },
@@ -27,48 +31,52 @@ const points = [
 ];
 
 function MapPage() {
-  const [active, setActive] = useState(points[0]!);
-  const [visited, setVisited] = useState<Set<string>>(new Set([points[0]!.id]));
+  usePageLanguage("Interactive Battle Map — Waterloo 1815", "Carte interactive de la bataille — Waterloo 1815", "Explore the key positions of the Battle of Waterloo on an antique campaign map.", "Explorez les positions clés de la bataille de Waterloo sur une carte ancienne.");
+  const lang = useLang();
+  const L = (text: string) => translate(lang, text);
+  const [active, setActive] = useState(points[0]);
+  const [visited, setVisited] = useState<Set<string>>(new Set(points[0] ? [points[0].id] : []));
 
   const pick = (p: (typeof points)[number]) => {
     setActive(p);
     setVisited((v) => new Set(v).add(p.id));
   };
 
+  if (!active) return null;
   return (
-    <main className="mx-auto max-w-7xl px-5 pb-20 pt-28">
-      <PageTitle kicker="18 June 1815" title="The Field of Waterloo" sub="Click the seals on the campaign map to uncover each hour of the battle." />
+    <main className="mx-auto max-w-7xl px-5 pb-20 pt-44 sm:pt-28">
+      <PageTitle kicker={L('18 June 1815')} title={L('The Field of Waterloo')} sub={L('Click the seals on the campaign map to uncover each hour of the battle.')} />
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         <div className="paper relative p-3">
           <div className="relative">
-            <img src={battleMap} alt="Antique map of the Waterloo battlefield" width={1600} height={1104} className="w-full" />
+            <img src={battleMap} alt={L("Antique map of the Waterloo battlefield")} width={1600} height={1104} className="w-full" />
             {points.map((p, i) => (
-              <button
+              <Button variant="ghost"
                 key={p.id}
                 onClick={() => pick(p)}
                 style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                aria-label={p.name}
-                className={`absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-gold font-heading text-sm font-bold transition-transform hover:scale-125 ${
+                aria-label={L(p.name)}
+                className={`absolute flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-gold p-0 font-heading text-sm font-bold transition-transform hover:scale-125 ${
                   active.id === p.id ? "scale-125 bg-primary text-primary-foreground animate-pulse-ring" : visited.has(p.id) ? "bg-ink text-gold" : "bg-primary text-primary-foreground"
                 }`}
               >
                 {i + 1}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
         <aside className="paper flex flex-col p-6">
-          <p className="font-heading text-xs uppercase tracking-[0.3em] text-primary">{active.time}</p>
-          <h2 className="mt-2 font-heading text-2xl font-bold">{active.name}</h2>
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-primary">{L(active.time)}</p>
+          <h2 className="mt-2 font-heading text-2xl font-bold">{L(active.name)}</h2>
           <div className="my-4 h-px bg-ink/30" />
-          <p className="italic leading-relaxed">{active.text}</p>
+          <p className="italic leading-relaxed">{L(active.text)}</p>
           <div className="mt-auto pt-6">
-            <p className="font-heading text-xs uppercase tracking-widest">Explored {visited.size} / {points.length}</p>
+            <p className="font-heading text-xs uppercase tracking-widest">{L("Explored")} {visited.size} / {points.length}</p>
             <div className="mt-2 h-2 bg-ink/20"><div className="h-full bg-primary transition-all" style={{ width: `${(visited.size / points.length) * 100}%` }} /></div>
             <ul className="mt-5 space-y-1 text-sm">
               {points.map((p, i) => (
                 <li key={p.id}>
-                  <button onClick={() => pick(p)} className={`hover:text-primary ${active.id === p.id ? "font-bold text-primary" : ""}`}>{i + 1}. {p.name}</button>
+                  <Button variant="ghost" onClick={() => pick(p)} className={`h-auto justify-start whitespace-normal text-left hover:text-primary ${active.id === p.id ? "font-bold text-primary" : ""}`}>{i + 1}. {L(p.name)}</Button>
                 </li>
               ))}
             </ul>
@@ -76,8 +84,8 @@ function MapPage() {
         </aside>
       </div>
       <div className="mt-8 flex flex-wrap justify-center gap-8 font-heading text-xs uppercase tracking-widest text-foreground/70">
-        <span><span className="mr-2 inline-block h-3 w-6 bg-destructive align-middle" />Allied & Prussian</span>
-        <span><span className="mr-2 inline-block h-3 w-6 bg-secondary align-middle" />French Army</span>
+        <span><span className="mr-2 inline-block h-3 w-6 bg-destructive align-middle" />{L('Allied & Prussian')}</span>
+        <span><span className="mr-2 inline-block h-3 w-6 bg-secondary align-middle" />{L('French Army')}</span>
       </div>
     </main>
   );
