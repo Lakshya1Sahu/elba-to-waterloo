@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { PageTitle } from "@/components/SiteChrome";
+import { BattleSim } from "@/components/BattleSim";
 
 export const Route = createFileRoute("/games")({
   head: () => ({
@@ -158,13 +159,14 @@ function Commanders() {
 }
 
 const tabs = [
+  { id: "sim", label: "Play as Napoleon", el: <BattleSim /> },
   { id: "quiz", label: "The Grand Quiz", el: <Quiz /> },
   { id: "chrono", label: "Chronology", el: <Chronology /> },
   { id: "cmd", label: "Choose Your Side", el: <Commanders /> },
 ];
 
 function GamesPage() {
-  const [tab, setTab] = useState("quiz");
+  const [tab, setTab] = useState("sim");
   return (
     <main className="mx-auto max-w-4xl px-5 pb-20 pt-28">
       <PageTitle kicker="Le Jeu de Guerre" title="Games & Quizzes" sub="Prove yourself worthy of a marshal's baton." />

@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteNav, SiteFooter } from "../components/SiteChrome";
+import { MusicPlayer } from "../components/MusicPlayer";
 import parchment from "../assets/parchment.jpg";
 
 function NotFoundComponent() {
@@ -130,6 +131,7 @@ function RootComponent() {
         <SiteNav />
         <Outlet />
         <SiteFooter />
+        <MusicPlayer />
       </div>
     </QueryClientProvider>
   );
