@@ -1,12 +1,14 @@
 import { Link } from "@tanstack/react-router";
+import { setLang, t, useLang } from "@/lib/i18n";
 
 const links = [
-  { to: "/", label: "Chronicle" },
-  { to: "/map", label: "Battle Map" },
-  { to: "/games", label: "Games & Quiz" },
+  { to: "/", label: "Chronicle", fr: "Chronique" },
+  { to: "/map", label: "Battle Map", fr: "Carte" },
+  { to: "/games", label: "Games & Quiz", fr: "Jeux & Quiz" },
 ] as const;
 
 export function SiteNav() {
+  const lang = useLang();
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-gold/30 bg-background/85 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-3">
@@ -14,9 +16,14 @@ export function SiteNav() {
         <div className="flex gap-5 font-heading text-xs uppercase tracking-[0.2em]">
           {links.map((l) => (
             <Link key={l.to} to={l.to} className="text-foreground/70 hover:text-gold" activeProps={{ className: "text-gold" }} activeOptions={{ exact: true }}>
-              {l.label}
+              {t(lang, l.label, l.fr)}
             </Link>
           ))}
+          <span className="flex border border-gold/60">
+            {(["en", "fr"] as const).map((x) => (
+              <button key={x} onClick={() => setLang(x)} className={`px-2 ${lang === x ? "bg-gold text-accent-foreground" : "text-gold"}`}>{x.toUpperCase()}</button>
+            ))}
+          </span>
         </div>
       </nav>
     </header>
@@ -24,12 +31,13 @@ export function SiteNav() {
 }
 
 export function SiteFooter() {
+  const lang = useLang();
   return (
     <footer className="border-t border-gold/30 px-5 py-10 text-center text-sm italic text-foreground/60">
       <div className="gold-rule mx-auto mb-6 max-w-md" />
-      “Glory is fleeting, but obscurity is forever.” — Napoleon Bonaparte
-      <p className="mt-6 text-xs not-italic text-foreground/50">Created by Lakshya, Atiff, Pranav &amp; Suryansh</p>
-      <p className="mt-1 text-xs not-italic text-foreground/50">Designed &amp; Developed with passion. © 2026 The Fall of Napoleon. All Rights Reserved.</p>
+      {t(lang, "“Glory is fleeting, but obscurity is forever.”", "« La gloire est éphémère, mais l'oubli est éternel. »")} — Napoléon Bonaparte
+      <p className="mt-6 text-xs not-italic text-foreground/50">{t(lang, "Created by", "Créé par")} Lakshya, Atiff, Pranav &amp; Suryansh</p>
+      <p className="mt-1 text-xs not-italic text-foreground/50">{t(lang, "Designed & Developed with passion. © 2026 The Fall of Napoleon. All Rights Reserved.", "Conçu & développé avec passion. © 2026 La Chute de Napoléon. Tous droits réservés.")}</p>
     </footer>
   );
 }

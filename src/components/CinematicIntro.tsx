@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import hero from "@/assets/hero-waterloo.jpg";
 import { music } from "@/lib/music";
 
-const lines = ["Europe, 1815.", "An exiled emperor escapes from Elba…", "Two armies wait in the rain of Belgium.", "One day will decide the fate of a continent."];
+const lines = ["Europe, 1815.", "Un empereur exilé s'échappe de l'île d'Elbe…", "Deux armées attendent sous la pluie de Belgique.", "Un seul jour décidera du sort d'un continent."];
 
 export function CinematicIntro() {
   const [stage, setStage] = useState<"hidden" | "gate" | "playing" | "title" | "out">("hidden");
@@ -30,9 +30,9 @@ export function CinematicIntro() {
       <div className="relative px-6 text-center">
         {stage === "gate" && (
           <div className="animate-fade-up">
-            <p className="font-heading text-xs uppercase tracking-[0.5em] text-gold">A Historical Picture in Three Acts</p>
-            <button onClick={() => { music.play("guard"); setStage("playing"); }} className="btn-vintage mt-8">▶ Begin the Film</button>
-            <p className="mt-4 text-sm italic text-foreground/60">Sound on for the full experience</p>
+            <p className="font-heading text-xs uppercase tracking-[0.5em] text-gold">Un film historique en trois actes</p>
+            <button onClick={() => { music.play("guard"); setStage("playing"); }} className="btn-vintage mt-8">▶ Commencer le film</button>
+            <p className="mt-4 text-sm italic text-foreground/60">Activez le son pour une expérience complète</p>
           </div>
         )}
         {stage === "playing" && line < lines.length && (
@@ -40,14 +40,14 @@ export function CinematicIntro() {
         )}
         {stage === "title" && (
           <div className="animate-fade-up">
-            <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">Presenting</p>
-            <h1 className="mt-4 font-display text-5xl text-foreground md:text-8xl">Napoleon</h1>
+            <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">Présente</p>
+            <h1 className="mt-4 font-display text-5xl text-foreground md:text-8xl">Napoléon</h1>
             <div className="gold-rule mx-auto my-5 max-w-md" />
-            <p className="font-heading text-xl tracking-[0.4em] md:text-3xl">THE ROAD TO WATERLOO</p>
+            <p className="font-heading text-xl tracking-[0.4em] md:text-3xl">LA ROUTE DE WATERLOO</p>
           </div>
         )}
       </div>
-      {stage !== "gate" && <button onClick={finish} className="absolute bottom-[14vh] right-6 font-heading text-xs uppercase tracking-widest text-foreground/60 hover:text-gold">Skip ›</button>}
+      {stage !== "gate" && <button onClick={finish} className="absolute bottom-[14vh] right-6 font-heading text-xs uppercase tracking-widest text-foreground/60 hover:text-gold">Passer ›</button>}
     </div>
   );
 }

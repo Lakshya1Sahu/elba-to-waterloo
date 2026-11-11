@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import hero from "@/assets/hero-waterloo.jpg";
+import img_napoleon from "@/assets/char-napoleon.jpg";
+import img_wellington from "@/assets/char-wellington.jpg";
+import img_blucher from "@/assets/char-blucher.jpg";
+import img_ney from "@/assets/char-ney.jpg";
+import img_grouchy from "@/assets/char-grouchy.jpg";
+import img_alexander from "@/assets/char-alexander.jpg";
+import img_nelson from "@/assets/char-nelson.jpg";
+import img_josephine from "@/assets/char-josephine.jpg";
+import { useLang, t } from "@/lib/i18n";
 import { CinematicIntro } from "@/components/CinematicIntro";
 import portrait from "@/assets/napoleon-portrait.jpg";
 
@@ -34,14 +43,14 @@ const timeline = [
 ];
 
 const characters = [
-  { n: "Napoleon Bonaparte", r: "Emperor of the French", s: "French", d: "Military genius who rose from Corsican officer to master of Europe, defeated at last at Waterloo." },
-  { n: "Duke of Wellington", r: "Commander, Anglo-Allied Army", s: "Allied", d: "Arthur Wellesley, victor of the Peninsular War; held the ridge of Mont-Saint-Jean all day." },
-  { n: "Gebhard von Blücher", r: "Prussian Field Marshal", s: "Allied", d: "Aged 72, beaten at Ligny, he still marched to Waterloo and struck the decisive blow at Plancenoit." },
-  { n: "Marshal Michel Ney", r: "'Bravest of the Brave'", s: "French", d: "Led the great cavalry charges and the Guard's attack; executed for treason later in 1815." },
-  { n: "Marshal Grouchy", r: "Commander of the Right Wing", s: "French", d: "Sent to chase the Prussians with 33,000 men, he never reached the battlefield in time." },
-  { n: "Tsar Alexander I", r: "Emperor of Russia", s: "Allied", d: "Napoleon's ally at Tilsit turned enemy; his armies destroyed the Grande Armée in 1812." },
-  { n: "Horatio Nelson", r: "British Admiral", s: "Allied", d: "Won Trafalgar in 1805, ending Napoleon's hopes of invading Britain. Killed in the battle." },
-  { n: "Josephine & Marie-Louise", r: "Empresses of France", s: "French", d: "His first love Josephine, divorced in 1810; then Marie-Louise of Austria, mother of his heir." },
+  { n: "Napoleon Bonaparte", r: "Emperor of the French", s: "French", d: "Military genius who rose from Corsican officer to master of Europe, defeated at last at Waterloo.", img: img_napoleon, fr: { r: "Empereur des Français", d: "Génie militaire passé d'officier corse à maître de l'Europe, vaincu enfin à Waterloo." } },
+  { n: "Duke of Wellington", r: "Commander, Anglo-Allied Army", s: "Allied", d: "Arthur Wellesley, victor of the Peninsular War; held the ridge of Mont-Saint-Jean all day.", img: img_wellington, fr: { r: "Commandant de l'armée anglo-alliée", d: "Arthur Wellesley, vainqueur de la guerre d'Espagne ; il tint la crête du Mont-Saint-Jean toute la journée." } },
+  { n: "Gebhard von Blücher", r: "Prussian Field Marshal", s: "Allied", d: "Aged 72, beaten at Ligny, he still marched to Waterloo and struck the decisive blow at Plancenoit.", img: img_blucher, fr: { r: "Maréchal prussien", d: "À 72 ans, battu à Ligny, il marcha pourtant sur Waterloo et porta le coup décisif à Plancenoit." } },
+  { n: "Marshal Michel Ney", r: "'Bravest of the Brave'", s: "French", d: "Led the great cavalry charges and the Guard's attack; executed for treason later in 1815.", img: img_ney, fr: { r: "« Le Brave des Braves »", d: "Il mena les grandes charges de cavalerie et l'attaque de la Garde ; fusillé pour trahison fin 1815." } },
+  { n: "Marshal Grouchy", r: "Commander of the Right Wing", s: "French", d: "Sent to chase the Prussians with 33,000 men, he never reached the battlefield in time.", img: img_grouchy, fr: { r: "Commandant de l'aile droite", d: "Envoyé poursuivre les Prussiens avec 33 000 hommes, il n'atteignit jamais le champ de bataille à temps." } },
+  { n: "Tsar Alexander I", r: "Emperor of Russia", s: "Allied", d: "Napoleon's ally at Tilsit turned enemy; his armies destroyed the Grande Armée in 1812.", img: img_alexander, fr: { r: "Empereur de Russie", d: "Allié de Napoléon à Tilsit devenu ennemi ; ses armées détruisirent la Grande Armée en 1812." } },
+  { n: "Horatio Nelson", r: "British Admiral", s: "Allied", d: "Won Trafalgar in 1805, ending Napoleon's hopes of invading Britain. Killed in the battle.", img: img_nelson, fr: { r: "Amiral britannique", d: "Vainqueur à Trafalgar en 1805, il mit fin au rêve d'invasion de l'Angleterre. Tué au combat." } },
+  { n: "Josephine & Marie-Louise", r: "Empresses of France", s: "French", d: "His first love Josephine, divorced in 1810; then Marie-Louise of Austria, mother of his heir.", img: img_josephine, fr: { r: "Impératrices des Français", d: "Joséphine, son premier amour, répudiée en 1810 ; puis Marie-Louise d'Autriche, mère de son héritier." } },
 ];
 
 const wars = [
@@ -55,15 +64,17 @@ const wars = [
 ];
 
 const defeat = [
-  { t: "Overreach in Russia", d: "The 1812 invasion destroyed his best veterans and horses — losses he could never replace." },
-  { t: "The Spanish Ulcer", d: "Hundreds of thousands of troops were tied down in Spain, fighting guerrillas and Wellington." },
-  { t: "Europe United", d: "The coalitions learned to fight together and copied his methods; Britain's money paid for their armies." },
-  { t: "Britain Ruled the Seas", d: "After Trafalgar the Royal Navy blockaded France, and the Continental System hurt France's own allies." },
-  { t: "Mistakes at Waterloo", d: "He waited for the ground to dry, sent Grouchy away, and Ney's cavalry charged without infantry support." },
-  { t: "The Prussians Arrived", d: "Blücher's 50,000 men struck the French flank in the evening; the Guard broke and the army fled." },
+  { t: "Overreach in Russia", d: "The 1812 invasion destroyed his best veterans and horses — losses he could never replace.", fr: ["L'excès en Russie", "L'invasion de 1812 détruisit ses meilleurs vétérans et chevaux — des pertes irremplaçables."] },
+  { t: "The Spanish Ulcer", d: "Hundreds of thousands of troops were tied down in Spain, fighting guerrillas and Wellington.", fr: ["L'ulcère espagnol", "Des centaines de milliers de soldats furent immobilisés en Espagne face aux guérilleros et à Wellington."] },
+  { t: "Europe United", d: "The coalitions learned to fight together and copied his methods; Britain's money paid for their armies.", fr: ["L'Europe unie", "Les coalitions apprirent à combattre ensemble et copièrent ses méthodes ; l'or britannique paya leurs armées."] },
+  { t: "Britain Ruled the Seas", d: "After Trafalgar the Royal Navy blockaded France, and the Continental System hurt France's own allies.", fr: ["La Grande-Bretagne maîtresse des mers", "Après Trafalgar, la Royal Navy bloqua la France, et le Blocus continental nuisit à ses propres alliés."] },
+  { t: "Mistakes at Waterloo", d: "He waited for the ground to dry, sent Grouchy away, and Ney's cavalry charged without infantry support.", fr: ["Les erreurs de Waterloo", "Il attendit que le sol sèche, éloigna Grouchy, et la cavalerie de Ney chargea sans soutien d'infanterie."] },
+  { t: "The Prussians Arrived", d: "Blücher's 50,000 men struck the French flank in the evening; the Guard broke and the army fled.", fr: ["L'arrivée des Prussiens", "Les 50 000 hommes de Blücher frappèrent le flanc français le soir ; la Garde plia et l'armée s'enfuit."] },
 ];
 
 function Index() {
+  const lang = useLang();
+  const T = (en: string, fr: string) => t(lang, en, fr);
   return (
     <main>
       <CinematicIntro />
@@ -73,16 +84,16 @@ function Index() {
         <div className="relative px-5 text-center animate-fade-up">
           <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">Anno MDCCCXV</p>
           <h1 className="mt-6 font-display text-5xl leading-tight text-foreground drop-shadow-lg md:text-8xl">
-            Napoleon
+            {T("Napoleon", "Napoléon")}
           </h1>
-          <p className="mt-2 font-heading text-xl tracking-[0.3em] text-foreground/90 md:text-3xl">THE ROAD TO WATERLOO</p>
+          <p className="mt-2 font-heading text-xl tracking-[0.3em] text-foreground/90 md:text-3xl">{T("THE ROAD TO WATERLOO", "LA ROUTE DE WATERLOO")}</p>
           <div className="gold-rule mx-auto my-8 max-w-md" />
           <p className="mx-auto max-w-xl text-xl italic text-foreground/85">
-            The rise of an emperor, the conquest of a continent, and the single June day that ended it all.
+            {T("The rise of an emperor, the conquest of a continent, and the single June day that ended it all.", "L'ascension d'un empereur, la conquête d'un continent, et le seul jour de juin qui mit fin à tout.")}
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link to="/map" className="btn-vintage">Explore the Battlefield</Link>
-            <Link to="/games" className="btn-vintage">Test Your Knowledge</Link>
+            <Link to="/map" className="btn-vintage">{T("Explore the Battlefield", "Explorer le champ de bataille")}</Link>
+            <Link to="/games" className="btn-vintage">{T("Test Your Knowledge", "Testez vos connaissances")}</Link>
           </div>
         </div>
       </section>
@@ -93,14 +104,14 @@ function Index() {
           <p className="mt-3 text-center italic">Napoléon Ier, Empereur des Français</p>
         </div>
         <div>
-          <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">The Man</p>
-          <h2 className="mt-3 font-display text-4xl">A Corsican who conquered Europe</h2>
+          <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{T("The Man", "L'Homme")}</p>
+          <h2 className="mt-3 font-display text-4xl">{T("A Corsican who conquered Europe", "Un Corse qui conquit l'Europe")}</h2>
           <div className="gold-rule my-6 max-w-xs" />
           <p className="text-foreground/85 first-letter:float-left first-letter:mr-3 first-letter:font-display first-letter:text-6xl first-letter:text-gold">
-            Few men have bent history as Napoleon Bonaparte did. An artillery officer of minor nobility, he rose through the chaos of the Revolution to become First Consul and then Emperor, redrawing the map of Europe and leaving behind the Napoleonic Code, which still shapes law across the world.
+            {T("Few men have bent history as Napoleon Bonaparte did. An artillery officer of minor nobility, he rose through the chaos of the Revolution to become First Consul and then Emperor, redrawing the map of Europe and leaving behind the Napoleonic Code, which still shapes law across the world.", "Peu d'hommes ont plié l'histoire comme Napoléon Bonaparte. Officier d'artillerie de petite noblesse, il s'éleva dans le chaos de la Révolution pour devenir Premier consul puis Empereur, redessinant la carte de l'Europe et laissant le Code civil, qui inspire encore le droit dans le monde entier.")}
           </p>
           <p className="mt-4 text-foreground/85">
-            Yet ambition carried him to Moscow, to exile, and finally to the muddy ridges south of Brussels, where 190,000 men met to decide the fate of a continent.
+            {T("Yet ambition carried him to Moscow, to exile, and finally to the muddy ridges south of Brussels, where 190,000 men met to decide the fate of a continent.", "Mais l'ambition le mena à Moscou, à l'exil, puis enfin sur les crêtes boueuses au sud de Bruxelles, où 190 000 hommes se rencontrèrent pour décider du sort d'un continent.")}
           </p>
         </div>
       </section>
@@ -108,8 +119,8 @@ function Index() {
       <section className="px-5 py-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-14 text-center">
-            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Chronicle</p>
-            <h2 className="mt-3 font-display text-4xl">The Road, Year by Year</h2>
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{T("Chronicle", "Chronique")}</p>
+            <h2 className="mt-3 font-display text-4xl">{T("The Road, Year by Year", "La route, année par année")}</h2>
           </div>
           <ol className="relative border-l border-gold/50 pl-8">
             {timeline.map((t, i) => (
@@ -135,15 +146,16 @@ function Index() {
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
             <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Dramatis Personae</p>
-            <h2 className="mt-3 font-display text-4xl">The Main Characters</h2>
+            <h2 className="mt-3 font-display text-4xl">{T("The Main Characters", "Les personnages principaux")}</h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {characters.map((c) => (
-              <div key={c.n} className="paper p-6">
-                <p className={`font-heading text-xs uppercase tracking-widest ${c.s === "French" ? "text-secondary" : "text-primary"}`}>{c.s}</p>
+              <div key={c.n} className="paper p-4">
+                <img src={c.img} alt={`Portrait of ${c.n}`} width={736} height={912} loading="lazy" className="mb-4 aspect-[4/5] w-full object-cover sepia-img" />
+                <p className={`font-heading text-xs uppercase tracking-widest ${c.s === "French" ? "text-secondary" : "text-primary"}`}>{c.s === "French" ? T("French", "Français") : T("Allied", "Alliés")}</p>
                 <h3 className="mt-2 font-heading text-lg font-bold">{c.n}</h3>
-                <p className="text-sm italic">{c.r}</p>
-                <p className="mt-3 text-base">{c.d}</p>
+                <p className="text-sm italic">{T(c.r, c.fr.r)}</p>
+                <p className="mt-3 text-base">{T(c.d, c.fr.d)}</p>
               </div>
             ))}
           </div>
@@ -153,14 +165,14 @@ function Index() {
       <section className="px-5 py-20">
         <div className="mx-auto max-w-5xl">
           <div className="mb-12 text-center">
-            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">Europe at War</p>
-            <h2 className="mt-3 font-display text-4xl">The Napoleonic Wars & Campaigns</h2>
-            <p className="mx-auto mt-4 max-w-2xl italic text-foreground/75">Twelve years of war, seven coalitions, and millions of soldiers across a continent.</p>
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{T("Europe at War", "L'Europe en guerre")}</p>
+            <h2 className="mt-3 font-display text-4xl">{T("The Napoleonic Wars & Campaigns", "Les guerres et campagnes napoléoniennes")}</h2>
+            <p className="mx-auto mt-4 max-w-2xl italic text-foreground/75">{T("Twelve years of war, seven coalitions, and millions of soldiers across a continent.", "Douze ans de guerre, sept coalitions et des millions de soldats à travers un continent.")}</p>
           </div>
           <div className="paper overflow-x-auto p-6">
             <table className="w-full text-left">
               <thead className="font-heading text-xs uppercase tracking-widest">
-                <tr className="border-b border-ink/40"><th className="p-3">Years</th><th className="p-3">War</th><th className="p-3">Against</th><th className="p-3">Outcome</th></tr>
+                <tr className="border-b border-ink/40"><th className="p-3">{T("Years", "Années")}</th><th className="p-3">{T("War", "Guerre")}</th><th className="p-3">{T("Against", "Contre")}</th><th className="p-3">{T("Outcome", "Issue")}</th></tr>
               </thead>
               <tbody>
                 {wars.map((w) => (
@@ -180,15 +192,15 @@ function Index() {
       <section className="px-5 py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
-            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">The Fall</p>
-            <h2 className="mt-3 font-display text-4xl">How Was Napoleon Defeated?</h2>
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{T("The Fall", "La Chute")}</p>
+            <h2 className="mt-3 font-display text-4xl">{T("How Was Napoleon Defeated?", "Comment Napoléon fut-il vaincu ?")}</h2>
           </div>
           <ol className="grid gap-6 md:grid-cols-3">
             {defeat.map((d, i) => (
               <li key={d.t} className="paper p-6">
                 <span className="font-display text-4xl text-primary">{["I", "II", "III", "IV", "V", "VI"][i]}</span>
-                <h3 className="mt-2 font-heading text-lg font-bold">{d.t}</h3>
-                <p className="mt-2">{d.d}</p>
+                <h3 className="mt-2 font-heading text-lg font-bold">{T(d.t, d.fr[0]!)}</h3>
+                <p className="mt-2">{T(d.d, d.fr[1]!)}</p>
               </li>
             ))}
           </ol>
