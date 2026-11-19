@@ -1,4 +1,4 @@
-import { translate, useLang } from "@/lib/i18n";
+import { translate, useLang, usePageLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -21,6 +21,12 @@ import parchment from "../assets/parchment.jpg";
 function NotFoundComponent() {
   const lang = useLang();
   const L = (text: string) => translate(lang, text);
+  usePageLanguage(
+    "Page not found — Napoleon: The Road to Waterloo",
+    "Page introuvable — Napoléon : La Route de Waterloo",
+    "This page does not exist.",
+    "Cette page n'existe pas.",
+  );
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
@@ -45,6 +51,12 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const lang = useLang();
   const L = (text: string) => translate(lang, text);
+  usePageLanguage(
+    "This page didn't load — Napoleon: The Road to Waterloo",
+    "Cette page ne s'est pas chargée — Napoléon : La Route de Waterloo",
+    "Something went wrong on our end.",
+    "Une erreur est survenue de notre côté.",
+  );
   console.error(error);
   const router = useRouter();
   useEffect(() => {
