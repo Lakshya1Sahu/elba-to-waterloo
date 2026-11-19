@@ -17,11 +17,11 @@ export function CinematicIntro() {
   useEffect(() => {
     if (stage !== "playing") return;
     if (line >= lines.length) { setStage("title"); return; }
-    const t = setTimeout(() => setLine((l) => l + 1), 2600);
+    const t = setTimeout(() => setLine((l) => l + 1), 4800);
     return () => clearTimeout(t);
   }, [stage, line]);
   useEffect(() => {
-    if (stage === "title") { const t = setTimeout(() => finish(), 4500); return () => clearTimeout(t); }
+    if (stage === "title") { const t = setTimeout(() => finish(), 7000); return () => clearTimeout(t); }
     if (stage === "out") { const t = setTimeout(() => setStage("hidden"), 1500); return () => clearTimeout(t); }
     return undefined;
   }, [stage]);
@@ -37,7 +37,7 @@ export function CinematicIntro() {
     <div className={`fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background transition-opacity duration-[1500ms] ${stage === "out" ? "opacity-0" : "opacity-100"}`}>
       <img src={hero} alt="" className={`absolute inset-0 h-full w-full object-cover sepia-img transition-all duration-[3000ms] ${stage === "gate" ? "opacity-70" : stage === "title" || stage === "out" ? "scale-110 opacity-95" : "opacity-0"}`} />
       {scenes.map((src, k) => (
-        <img key={src} src={src} alt="" className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] ease-out ${stage === "playing" && line === k ? "scale-125 opacity-100 duration-[2600ms,9000ms]" : "scale-100 opacity-0 duration-[1500ms]"}`} />
+        <img key={src} src={src} alt="" className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] ease-out ${stage === "playing" && line === k ? "scale-125 opacity-100 duration-[1800ms,13000ms]" : "scale-100 opacity-0 duration-[1500ms]"}`} />
       ))}
       {stage === "playing" && <div key={line} className="pointer-events-none absolute inset-0 animate-flash bg-gold" />}
       <div className="absolute inset-0 vignette" />
