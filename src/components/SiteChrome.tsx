@@ -5,6 +5,7 @@ import { setLang, t, useLang } from "@/lib/i18n";
 const links = [
   { to: "/", label: "Chronicle", fr: "Chronique" },
   { to: "/map", label: "Battle Map", fr: "Carte" },
+  { to: "/film", label: "The Film", fr: "Le Film" },
   { to: "/games", label: "Games & Quiz", fr: "Jeux & Quiz" },
 ] as const;
 
