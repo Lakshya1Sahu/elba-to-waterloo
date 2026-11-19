@@ -97,7 +97,7 @@ function Index() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link to="/map" className="btn-vintage">{T("Explore the Battlefield", "Explorer le champ de bataille")}</Link>
-            <Link to="/games" className="btn-vintage">{T("Test Your Knowledge", "Testez vos connaissances")}</Link>
+            <Link to="/film" className="btn-vintage">{T("Watch the Film", "Voir le film")}</Link>
           </div>
         </div>
       </section>
