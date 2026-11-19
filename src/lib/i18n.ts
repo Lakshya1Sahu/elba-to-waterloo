@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { french } from "./french";
 export type Lang = "en" | "fr";
-let lang: Lang = "en";
+/** French is the site's default language; visitors may switch to English. */
+export const DEFAULT_LANG: Lang = "fr";
+let lang: Lang = DEFAULT_LANG;
 const subs = new Set<() => void>();
 export function setLang(l: Lang) { lang = l; document.documentElement.lang = l; try { localStorage.setItem("lang", l); } catch { /* ignore */ } subs.forEach((f) => f()); }
 export function useLang() {
-  const [l, set] = useState<Lang>("en");
+  const [l, set] = useState<Lang>(DEFAULT_LANG);
   useEffect(() => {
     const saved = localStorage.getItem("lang");
-    if ((saved === "fr" || saved === "en") && saved !== lang) lang = saved;
+    lang = saved === "en" || saved === "fr" ? saved : DEFAULT_LANG;
     document.documentElement.lang = lang;
     set(lang);
     const f = () => set(lang); subs.add(f); return () => { subs.delete(f); };

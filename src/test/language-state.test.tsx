@@ -1,6 +1,6 @@
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { setLang, useLang } from "@/lib/i18n";
+import { setLang, useLang, DEFAULT_LANG } from "@/lib/i18n";
 
 afterEach(() => {
   cleanup();
@@ -9,6 +9,14 @@ afterEach(() => {
 });
 
 describe("Site language selection", () => {
+  it("defaults to French when the visitor has chosen no language", () => {
+    localStorage.clear();
+    const first = renderHook(useLang);
+    expect(first.result.current).toBe("fr");
+    expect(DEFAULT_LANG).toBe("fr");
+    expect(document.documentElement.lang).toBe("fr");
+  });
+
   it("persists French and updates all mounted language subscribers", () => {
     const first = renderHook(useLang);
     const second = renderHook(useLang);
