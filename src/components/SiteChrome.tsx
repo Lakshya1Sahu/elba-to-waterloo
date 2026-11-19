@@ -34,7 +34,7 @@ export function SiteNav() {
 export function SiteFooter() {
   const lang = useLang();
   return (
-    <footer className="border-t border-gold/30 px-5 py-10 text-center text-sm italic text-foreground/60">
+    <footer className="border-t border-gold/30 px-5 pt-10 pb-24 text-center text-sm italic text-foreground/60 md:pb-10">
       <div className="gold-rule mx-auto mb-6 max-w-md" />
       {t(lang, "“Glory is fleeting, but obscurity is forever.”", "« La gloire est éphémère, mais l'oubli est éternel. »")} — Napoléon Bonaparte
       <p className="mt-6 text-xs not-italic text-foreground/50">{t(lang, "Created by", "Créé par")} Lakshya, Atiff, Pranav {t(lang, "&", "et")} Suryansh</p>
