@@ -41,6 +41,7 @@ export function CinematicIntro() {
       ))}
       {stage === "playing" && <div key={line} className="pointer-events-none absolute inset-0 animate-flash bg-gold" />}
       <div className="absolute inset-0 vignette" />
+      <div className="absolute inset-0 intro-scrim" />
       <div className="relative z-10 px-6 text-center">
         {stage === "gate" && (
           <div className="animate-fade-up">
@@ -50,10 +51,10 @@ export function CinematicIntro() {
           </div>
         )}
         {stage === "playing" && line < lines.length && (
-          <p key={line} className="animate-fade-up font-heading text-2xl tracking-[0.15em] text-foreground md:text-4xl">{lines[line]}</p>
+          <p key={line} className="intro-text animate-fade-up font-heading text-2xl tracking-[0.15em] text-foreground md:text-4xl">{lines[line]}</p>
         )}
         {stage === "title" && (
-          <div className="animate-fade-up">
+          <div className="intro-text animate-fade-up">
             <p className="font-heading text-sm uppercase tracking-[0.5em] text-gold">Présente</p>
             <h1 className="mt-4 font-display text-5xl text-foreground md:text-8xl">Napoléon</h1>
             <div className="gold-rule mx-auto my-5 max-w-md" />
