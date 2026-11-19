@@ -15,7 +15,7 @@ export function MusicPlayer() {
   const cur = useMusic();
   const [open, setOpen] = useState(false);
   return (
-    <div className="fixed bottom-4 left-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 md:left-4 md:right-auto">
       {open && (
         <div className="paper mb-3 w-72 p-4">
           <p className="font-heading text-xs uppercase tracking-[0.3em]">{L('Military Band')}</p>

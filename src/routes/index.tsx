@@ -12,6 +12,9 @@ import { useLang, t, translate, usePageLanguage } from "@/lib/i18n";
 import { CinematicIntro } from "@/components/CinematicIntro";
 import portrait from "@/assets/napoleon-portrait.jpg";
 
+/** YouTube video ID extracted from https://youtu.be/us6-712HwM0 */
+const VIDEO_ID = "us6-712HwM0";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -208,6 +211,33 @@ function Index() {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      <section className="px-5 py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-12 text-center">
+            <p className="font-heading text-xs uppercase tracking-[0.4em] text-gold">{T("The Full Story", "L'histoire complète")}</p>
+            <h2 className="mt-3 font-display text-4xl">{T("Watch: Waterloo in Detail", "Regarder : Waterloo en détail")}</h2>
+            <p className="mx-auto mt-4 max-w-2xl italic text-foreground/75">{T("An eleven-minute film on the battle of 18 June 1815: the mud, the mistakes, and the Prussians arriving too late.", "Un film de onze minutes sur la bataille du 18 juin 1815 : la boue, les erreurs, et les Prussiens qui arrivent trop tard.")}</p>
+          </div>
+          <figure className="paper rotate-[-0.6deg] p-4">
+            <div className="relative aspect-video w-full overflow-hidden border border-ink/40 bg-ink">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0`}
+                title="Waterloo : La bataille qui a détruit l'Empire de Napoléon — Les Chapitres Oubliés"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
+            <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-2 text-sm italic">
+              <span>« Waterloo : La bataille qui a détruit l'Empire de Napoléon » — Les Chapitres Oubliés (11:26)</span>
+              <a href={`https://www.youtube.com/watch?v=${VIDEO_ID}`} target="_blank" rel="noopener noreferrer" className="font-heading text-xs uppercase tracking-widest text-primary not-italic hover:underline">{T("Watch on YouTube", "Voir sur YouTube")}</a>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
