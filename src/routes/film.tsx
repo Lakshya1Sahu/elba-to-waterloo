@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useLang, t, usePageLanguage } from "@/lib/i18n";
 import { PageTitle } from "@/components/SiteChrome";
+import { useEffect, useRef, useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import film from "@/assets/waterloo-film.mp4.asset.json";
+import frenchSubtitles from "@/assets/waterloo-fr.vtt.asset.json";
+import englishSubtitles from "@/assets/waterloo-en.vtt.asset.json";
 
-/** YouTube video ID extracted from https://youtu.be/us6-712HwM0 */
-const VIDEO_ID = "us6-712HwM0";
 
 export const Route = createFileRoute("/film")({
   head: () => ({
@@ -28,6 +31,25 @@ function FilmPage() {
   );
   const lang = useLang();
   const T = (en: string, fr: string) => t(lang, en, fr);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [subtitle, setSubtitle] = useState<string>(lang);
+  const [playbackError, setPlaybackError] = useState(false);
+
+  useEffect(() => { setSubtitle(lang); }, [lang]);
+  const applySubtitles = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    for (const track of Array.from(video.textTracks)) {
+      track.mode = track.language === subtitle ? "showing" : "disabled";
+    }
+  };
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    for (const track of Array.from(video.textTracks)) {
+      track.mode = track.language === subtitle ? "showing" : "disabled";
+    }
+  }, [subtitle]);
 
   return (
     <main className="px-5 pb-24 pt-28">
@@ -42,19 +64,36 @@ function FilmPage() {
       <div className="mx-auto max-w-4xl">
         <figure className="paper rotate-[-0.6deg] p-4">
           <div className="relative aspect-video w-full overflow-hidden border border-ink/40 bg-ink">
-            <iframe
+            <video
+              ref={videoRef}
               className="absolute inset-0 h-full w-full"
-              src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?rel=0`}
-              title="Waterloo : La bataille qui a détruit l'Empire de Napoléon — Les Chapitres Oubliés"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
+              src={film.url}
+              aria-label={T("Waterloo film", "Film sur Waterloo")}
+              controls
+              playsInline
+              preload="metadata"
+              onLoadedMetadata={applySubtitles}
+              onError={() => setPlaybackError(true)}
+            >
+              <track kind="subtitles" src={frenchSubtitles.url} srcLang="fr" label={T("French", "Français")} onLoad={applySubtitles} />
+              <track kind="subtitles" src={englishSubtitles.url} srcLang="en" label={T("English", "Anglais")} onLoad={applySubtitles} />
+            </video>
+          </div>
+          {playbackError && <p role="alert" className="mt-3 text-destructive">{T("The video could not load. Please reload the page or download the film below.", "Le film n’a pas pu se charger. Rechargez la page ou téléchargez le film ci-dessous.")}</p>}
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <span id="subtitle-label" className="text-sm">{T("Subtitles", "Sous-titres")}</span>
+            <Select value={subtitle} onValueChange={setSubtitle}>
+              <SelectTrigger aria-labelledby="subtitle-label" className="w-40"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="fr">{T("French", "Français")}</SelectItem>
+                <SelectItem value="en">{T("English", "Anglais")}</SelectItem>
+                <SelectItem value="off">{T("Off", "Désactivés")}</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-2 text-sm italic">
-            <span>« Waterloo : La bataille qui a détruit l'Empire de Napoléon » — Les Chapitres Oubliés (11:26)</span>
-            <a href={`https://www.youtube.com/watch?v=${VIDEO_ID}`} target="_blank" rel="noopener noreferrer" className="font-heading text-xs uppercase tracking-widest text-primary not-italic hover:underline">{T("Watch on YouTube", "Voir sur YouTube")}</a>
+            <span>« {T("Waterloo: The battle that destroyed Napoleon’s Empire", "Waterloo : La bataille qui a détruit l'Empire de Napoléon")} » — Les Chapitres Oubliés (11:26)</span>
+            <a href={film.url} download="waterloo.mp4" className="font-heading text-xs uppercase tracking-widest text-primary not-italic hover:underline">{T("Download the film", "Télécharger le film")}</a>
           </figcaption>
         </figure>
       </div>

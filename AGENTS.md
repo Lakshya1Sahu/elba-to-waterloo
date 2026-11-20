@@ -30,3 +30,4 @@ use the editor.
 <!-- LOVABLE:END -->
 
 - Translate shared interactive content with the central French catalog and live language hook; keep game state language-neutral so switching languages also updates past feedback and dispatches.
+- Serve uploaded film media and timed WebVTT subtitle tracks through Lovable Assets; use native video playback controls to preserve browser accessibility and fullscreen support.
