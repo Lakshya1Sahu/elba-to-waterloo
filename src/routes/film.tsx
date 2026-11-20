@@ -79,7 +79,7 @@ function FilmPage() {
               <track kind="subtitles" src={englishSubtitles.url} srcLang="en" label={T("English", "Anglais")} onLoad={applySubtitles} />
             </video>
           </div>
-          {playbackError && <p role="alert" className="mt-3 text-destructive">{T("The video could not load. Please reload the page or download the film below.", "Le film n’a pas pu se charger. Rechargez la page ou téléchargez le film ci-dessous.")}</p>}
+          {playbackError && <p role="alert" className="mt-3 text-destructive">{T("The video could not load. Please reload the page.", "Le film n’a pas pu se charger. Rechargez la page.")}</p>}
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <span id="subtitle-label" className="text-sm">{T("Subtitles", "Sous-titres")}</span>
             <Select value={subtitle} onValueChange={setSubtitle}>
@@ -93,7 +93,6 @@ function FilmPage() {
           </div>
           <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-2 text-sm italic">
             <span>« {T("Waterloo: The battle that destroyed Napoleon’s Empire", "Waterloo : La bataille qui a détruit l'Empire de Napoléon")} » — Les Chapitres Oubliés (11:26)</span>
-            <a href={film.url} download="waterloo.mp4" className="font-heading text-xs uppercase tracking-widest text-primary not-italic hover:underline">{T("Download the film", "Télécharger le film")}</a>
           </figcaption>
         </figure>
       </div>
